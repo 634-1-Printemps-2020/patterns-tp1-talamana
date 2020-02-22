@@ -1,5 +1,7 @@
 package metier;
 
+import outils.Labyrinthe;
+
 import java.util.*;
 
 public class PyRat {
@@ -26,18 +28,24 @@ public class PyRat {
     /* Regarde dans la liste des fromages s’il y a un fromage à la position pos.
         @return true s'il y a un fromage à la position pos, false sinon. */
     private boolean fromageIci(Point pos) {
-        return false;
+        return Labyrinthe.getFromages().contains(pos);
     }
 
     /* Regarde de manière performante (accès en ordre constant) s’il y a un fromage à la position pos.
         @return true s'il y a un fromage à la position pos, false sinon. */
     private boolean fromageIci_EnOrdreConstant(Point pos) {
-        return false;
+        List<Point> tmp = Labyrinthe.getFromages();
+        HashSet<Point> result = new HashSet<Point>(tmp);
+        return result.contains(pos);
     }
 
     /* Indique si le joueur peut passer de la position (du Point) « de » au point « a ».
         @return true s'il y a un passage depuis  « de » vers « a ». */
     private boolean passagePossible(Point de, Point a) {
+        Map<Point,List<Point>> laby = Labyrinthe.getLaby();
+        if (laby.containsKey(de)){
+            return (laby.get(de)).contains(a);
+        }
         return false;
     }
 
@@ -45,12 +53,25 @@ public class PyRat {
         mais sans devoir parcourir la liste des Points se trouvant dans la Map !
         @return true s'il y a un passage depuis  « de » vers « a ». */
     private boolean passagePossible_EnOrdreConstant(Point de, Point a) {
+        Map<Point,List<Point>> tmp = Labyrinthe.getLaby();
+        HashMap<Point,List<Point>> laby = new HashMap<Point,List<Point>>(tmp);
+        if (laby.containsKey(de)){
+            return (laby.get(de)).contains(a);
+        }
         return false;
+
     }
 
     /* Retourne la liste des points qui ne peuvent pas être atteints depuis la position « pos ».
         @return la liste des points qui ne peuvent pas être atteints depuis la position « pos ». */
     private List<Point> pointsInatteignables(Point pos) {
-        return null;
+        List<Point> result = new ArrayList<Point>();
+
+        Map<Point,List<Point>> laby = Labyrinthe.getLaby();
+        laby.forEach((k,v)-> v.forEach(
+                (v2) -> System.out.println("points accessibles :" + v2.toString())));
+
+
+        return result;
     }
 }
